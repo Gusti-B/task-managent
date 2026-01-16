@@ -504,7 +504,7 @@ function renderTaskList(filterType = 'all', filterValue = null) {
     const taskListContainer = document.getElementById('taskList');
     if (!taskListContainer) return;
     
-    let tasks = taskService.getAllTasks();
+    let tasks = TaskRepository.getAllTasks();
     
     // Apply filters
     switch (filterType) {
