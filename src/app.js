@@ -504,7 +504,7 @@ function renderTaskList(filterType = 'all', filterValue = null) {
     const taskListContainer = document.getElementById('taskList');
     if (!taskListContainer) return;
     
-    let tasks = TaskRepository.getAllTasks();
+    let tasks = taskService.getAllTasks();
     
     // Apply filters
     switch (filterType) {
@@ -653,4 +653,6 @@ function renderCategoryStats() {
             <div class="category-stats">${statsHTML}</div>
         `;
     }
-}
+er,
+        app
+    };
