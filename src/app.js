@@ -24,7 +24,7 @@ let app = {
  * Initialize aplikasi
  */
 function initializeApp() {
-    console.log('🚀 Initializing Day 2 Task Management System...');
+    console.log('🚀 Initializing Task Management System...');
     
     try {
         // Initialize storage manager
@@ -53,6 +53,9 @@ function initializeApp() {
         
         // Show login section
         showLoginSection();
+
+        // Render initial UI
+        renderCategoryStats(); // NEW: Render category stats
         
         console.log('✅ Day 2 Application initialized successfully!');
         
@@ -128,6 +131,43 @@ function setupAuthEventListeners() {
     if (refreshTasks) {
         refreshTasks.addEventListener('click', () => app.taskView.refresh());
     }
+    // Tambahkan di function setupEventListeners()
+
+    // Category filter buttons
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    categoryButtons.forEach(btn => {
+        btn.addEventListener('click', handleCategoryFilter);
+    });
+    // ============================================
+    // UI IMPROVEMENTS - Day 4
+    // ============================================
+    
+    // Add loading state untuk buttons
+    document.addEventListener('click', (e) => {
+        if (e.target.matches('.btn') && !e.target.classList.contains('loading')) {
+            // Add loading class
+            e.target.classList.add('loading');
+            
+            // Remove after action completes
+            setTimeout(() => {
+                e.target.classList.remove('loading');
+            }, 500);
+        }
+    });
+    
+    // Add smooth scroll untuk anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
 }
 
 /**
@@ -435,7 +475,6 @@ if (typeof module !== 'undefined' && module.exports) {
         app
     };
 }
-
 // Tambahkan functions baru di akhir file
 
 /**
@@ -458,7 +497,6 @@ function handleCategoryFilter(event) {
     // Render tasks filtered by category
     renderTaskList('category', category);
 }
-
 /**
  * Update renderTaskList function untuk support category filtering
  */
@@ -510,7 +548,6 @@ function renderTaskList(filterType = 'all', filterValue = null) {
     const taskHTML = tasks.map(task => createTaskHTML(task)).join('');
     taskListContainer.innerHTML = taskHTML;
 }
-
 /**
  * Update createTaskHTML function untuk include category display
  */
@@ -616,36 +653,4 @@ function renderCategoryStats() {
             <div class="category-stats">${statsHTML}</div>
         `;
     }
-}
-
-// Update initializeApp function untuk include category stats
-function initializeApp() {
-    console.log('🚀 Initializing Task Management System...');
-    
-    // Initialize storage manager
-    storageManager = new StorageManager('taskApp');
-    
-    // Initialize task service
-    taskService = new TaskService(storageManager);
-    
-    // Set up event listeners
-    setupEventListeners();
-    // Tambahkan di function setupEventListeners()
-
-    // Category filter buttons
-    const categoryButtons = document.querySelectorAll('.category-btn');
-    categoryButtons.forEach(btn => {
-        btn.addEventListener('click', handleCategoryFilter);
-    });
-    
-    // Listen for task service events
-    taskService.addListener(handleTaskServiceEvent);
-    
-    // Render initial UI
-    renderTaskList();
-    renderTaskStats();
-    renderCategoryStats(); // NEW: Render category stats
-    
-    console.log('✅ Application initialized successfully!');
-    console.log(`📊 Loaded ${taskService.getAllTasks().length} existing tasks`);
 }
