@@ -653,4 +653,6 @@ function renderCategoryStats() {
             <div class="category-stats">${statsHTML}</div>
         `;
     }
-}
+er,
+        app
+    };
